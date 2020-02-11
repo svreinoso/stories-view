@@ -1,5 +1,5 @@
 var branchModel = require('../models/branchModel.js');
-
+var mongoose = require('mongoose');
 /**
  * branchController.js
  *
@@ -49,6 +49,7 @@ module.exports = {
      */
     create: function (req, res) {
         var branch = new branchModel({
+            _id: new mongoose.Types.ObjectId(),
 			name : req.body.name
         });
 

@@ -4,6 +4,7 @@ router.use('/cars', require('./carRoutes'));
 router.use('/branches', require('./branchRoutes'));
 router.use('/users', require('./userRoutes'));
 router.use('/auth', require('./authRoutes'));
+router.use('/models', require('../../controllers/modelController'));
 
 router.use((err, req, res, next) => {
     if (err.name === 'ValidationError') {
