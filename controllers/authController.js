@@ -3,6 +3,11 @@ const passport = require('passport');
 
 const User = mongoose.model('user');
 
+exports.logout = (req, res) => {
+    req.logout();
+    res.send();
+}
+
 exports.login = (req, res, next) => {
     if (!req.body.user.email) {
         return res.status(422).json({
@@ -19,7 +24,6 @@ exports.login = (req, res, next) => {
             },
         });
     }
-    console.log(req.body.user);
     passport.authenticate(
         'local',
         {
@@ -45,7 +49,7 @@ exports.login = (req, res, next) => {
 
 exports.register = (req, res, next) => {
     let body = req.body.user;
-    if(!body) {
+    if (!body) {
         res.status(400).json({
             message: "user is required."
         })
@@ -73,6 +77,9 @@ exports.register = (req, res, next) => {
 
     user.username = body.username;
     user.email = body.email;
+    user.phoneNumber = body.phoneNumber;
+    user.lastName = body.lastName;
+    user.firstName = body.firstName;
     user.setPassword(body.password);
 
     user
@@ -82,5 +89,7 @@ exports.register = (req, res, next) => {
                 user: user.toAuthJSON(),
             });
         })
-        .catch(next);
+        .catch(err => {
+            return res.status(500).json(err);
+        });
 };

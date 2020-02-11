@@ -18,4 +18,11 @@ router.post('/login', auth.optional, authController.login);
  */
 router.post('/register', auth.optional, authController.register);
 
+/**
+ * @route POST /logout
+ * @description logout
+ * @access auth
+ */
+router.post('/logout', auth.required, authController.logout);
+
 module.exports = router;

@@ -11,6 +11,7 @@ module.exports = {
      * branchController.list()
      */
     list: function (req, res) {
+        console.log(req.payload)
         branchModel.find(function (err, branchs) {
             if (err) {
                 return res.status(500).json({
@@ -48,9 +49,7 @@ module.exports = {
      */
     create: function (req, res) {
         var branch = new branchModel({
-			name : req.body.name,
-			color : req.body.color
-
+			name : req.body.name
         });
 
         branch.save(function (err, branch) {
@@ -83,7 +82,6 @@ module.exports = {
             }
 
             branch.name = req.body.name ? req.body.name : branch.name;
-			branch.color = req.body.color ? req.body.color : branch.color;
 			
             branch.save(function (err, branch) {
                 if (err) {

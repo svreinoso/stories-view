@@ -5,17 +5,16 @@ const jwt = require('jsonwebtoken');
 const { secret } = require('../config/auth');
 
 var UserSchema = new Schema({
-	'username' : String,
-	'email' : String,
-	'firstName' : String,
-	'lastName' : String,
+	'username': { type: String, required: true, unique: true },
+	'email': { type: String, required: true, unique: true },
+	'firstName': { type: String, required: true },
+	'lastName': { type: String, required: true },
 	'birthday' : Date,
 	'address' : String,
-	'phoneNumber' : String,
+	'phoneNumber': { type: String, required: true, unique: true },
 	'hash' : String,
 	'salt' : String
 });
-
 
 UserSchema.methods.validPassword = function (password) {
 	const hash = crypto

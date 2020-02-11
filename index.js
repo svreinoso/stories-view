@@ -14,9 +14,12 @@ const ALLOW_DEBUGGING = process.env.DEBUG || true;
 const dbConfig = require('./config/database.config.js');
 const api = require('./routes');
 
+
 mongoose
     .connect(dbConfig.url, {
         useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex: true
     })
     .then(() => {
         console.log('Successfully connected to the database');
@@ -45,6 +48,8 @@ app.get('/', (req, res) => {
 require('./config/passport');
 app.use(passport.initialize());
 app.use(passport.session());
+
+
 app.use(api);
 
 app.listen(PORT, () => {

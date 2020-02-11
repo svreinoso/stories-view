@@ -9,23 +9,23 @@ const User = require('../models/userModel.js');
 /**
  * userController.list()
  */
-exports.list = (req, res) => {
-    User.find((err, users) => {
-        if (err) {
-            return res.status(500).json({
-                message: 'Error when getting user.',
-                error: err,
-            });
-        }
+exports.list = async (req, res) => {
+    try {
+        let users = await User.find();
         return res.json(users);
-    });
+    } catch (err) {
+        return res.status(500).json({
+            message: 'Error when getting user.',
+            error: err,
+        });
+    }
 };
 
 /**
  * userController.show()
  */
 exports.show = (req, res) => {
-    console.log(req.session);
+    console.log(req.payload);
     console.log(req.user);
     const { id } = req.params;
     User.findOne({ _id: id }, (err, user) => {
