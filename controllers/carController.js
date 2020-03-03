@@ -10,16 +10,40 @@ module.exports = {
     /**
      * carController.list()
      */
-    list: function (req, res) {
-        carModel.find(function (err, cars) {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Error when getting car.',
-                    error: err
-                });
-            }
+    list: async function (req, res) {
+        let discountDate = req.query.discountDate;
+        let maxPercent = req.query.maxPercent;
+        let minPercent = req.query.minPercent;
+        let filter = {};
+        if(discountDate) {
+            filter["discounts.endDate"] = { $gte: discountDate };
+            filter["discounts.startDate"] = { $lte: discountDate };
+        }
+        if (maxPercent) {
+            filter["discounts.percent"] = { $lte: maxPercent };
+        }
+        if (minPercent) {
+            filter["discounts.percent"] = { $gte: minPercent };
+        }
+        try {
+            let cars = await carModel.find(filter).populate("model").exec();
             return res.json(cars);
-        });
+        } catch (error) {
+            return res.status(500).json({
+                message: 'Error when getting car.',
+                error
+            });
+        }
+
+        // carModel.find(function (err, cars) {
+        //     if (err) {
+        //         return res.status(500).json({
+        //             message: 'Error when getting car.',
+        //             error: err
+        //         });
+        //     }
+        //     return res.json(cars);
+        // });
     },
 
     /**
@@ -49,8 +73,10 @@ module.exports = {
     create: function (req, res) {
         var car = new carModel({
 			carDoor : req.body.carDoor,
-			color : req.body.color
-
+			color : req.body.color,
+            price: req.body.price,
+            model: req.body.model,
+            discounts: req.body.discounts
         });
 
         car.save(function (err, car) {
