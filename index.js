@@ -11,9 +11,11 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const ALLOW_DEBUGGING = process.env.DEBUG || true;
 
+const dotenv = require('dotenv');
+dotenv.config();
+
 const dbConfig = require('./config/database.config.js');
 const api = require('./routes');
-
 
 mongoose
     .connect(dbConfig.url, {
